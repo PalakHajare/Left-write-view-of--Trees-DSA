@@ -1,0 +1,100 @@
+import java.util.*;
+
+class PrintRightView {
+	private static class Node {
+		int data;
+		Node left, right;
+
+		public Node(int data) {
+			this.data = data;
+			this.left = null;
+			this.right = null;
+		}
+	}
+
+	private static Node constructTree(int[] arr) {
+		if (arr.length == 0) return null;
+		Queue<Node> queue = new LinkedList<>();
+		Node root = new Node(arr[0]);
+		queue.add(root);
+		int i = 1;
+
+		while (!queue.isEmpty() && i < arr.length) {
+			Node current = queue.poll();
+			if (arr[i] != -1) {
+				current.left = new Node(arr[i]);
+				queue.add(current.left);
+			}
+			i++;
+			if (i < arr.length && arr[i] != -1) {
+				current.right = new Node(arr[i]);
+				queue.add(current.right);
+			}
+			i++;
+		}
+		return root;
+	}
+
+	private static void printLeftView(Node root) {
+		if (root == null) return;
+
+		Queue<Node> queue = new LinkedList<>();
+		queue.add(root);
+
+		while (!queue.isEmpty()) {
+			int n = queue.size();
+
+			for (int i = 1; i <= n; i++) {
+				Node temp = queue.poll();
+
+				// Print the first node of each level
+				if (i == 1)
+					System.out.print(temp.data + " ");
+
+				if (temp.left != null)
+					queue.add(temp.left);
+
+				if (temp.right != null)
+					queue.add(temp.right);
+			}
+		}
+		System.out.println();
+	}
+
+	private static void printRightView(Node root) {
+		if (root == null) return;
+
+		Queue<Node> queue = new LinkedList<>();
+		queue.add(root);
+
+		while (!queue.isEmpty()) {
+			int n = queue.size();
+
+			for (int i = 1; i <= n; i++) {
+				Node temp = queue.poll();
+
+				// Print the last node of each level
+				if (i == n)
+					System.out.print(temp.data + " ");
+
+				if (temp.left != null)
+					queue.add(temp.left);
+
+				if (temp.right != null)
+					queue.add(temp.right);
+			}
+		}
+		System.out.println();
+	}
+
+	public static void main(String[] args) {
+		int[] a = new int[] { 50, 25, 12, -1, -1, 37, 30, -1, -1, -1, 75, 62, -1, 70, -1, -1, 87, -1, -1 };
+		Node root = constructTree(a);
+
+		System.out.print("Left View: ");
+		printLeftView(root);
+
+		System.out.print("Right View: ");
+		printRightView(root);
+	}
+}
